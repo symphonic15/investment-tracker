@@ -1,0 +1,276 @@
+<div class="header bg-gradient-default pb-3 pt-3">
+  <div class="container-fluid">
+    <h2 class="mb-3 text-secondary">My investments</h2>
+    <div class="header-body">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body" placement="bottom" tooltipClass="help-tooltip" ngbTooltip="Calculated based on charged operations">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total invested</h5>
+                  <span class="h2 font-weight-bold mb-0">${{ generalData.total_invested }}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-default text-white rounded-circle shadow">
+                    <i class="fas fa-coins"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body" placement="bottom" tooltipClass="help-tooltip" ngbTooltip="Calculated based on seted market price of assets and quantity stored in portfolio">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Current investment value</h5>
+                  <span *ngIf="generalData.total_investment_value > generalData.total_invested" class="h2 font-weight-bold text-success mb-0">${{ generalData.total_investment_value }}</span>
+                  <span *ngIf="generalData.total_investment_value < generalData.total_invested" class="h2 font-weight-bold text-danger mb-0">${{ generalData.total_investment_value }}</span>
+                  <span *ngIf="generalData.total_investment_value == generalData.total_invested" class="h2 font-weight-bold mb-0">${{ generalData.total_investment_value }}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-default text-white rounded-circle shadow">
+                    <i class="fas fa-chart-bar"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body" placement="bottom" tooltipClass="help-tooltip" ngbTooltip="Calculated based on the first two previous values">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Current profit/loss (%)</h5>
+                  <span *ngIf="generalData.per_profit > 0" class="h2 font-weight-bold text-success mb-0">
+                    <i class="fas fa-arrow-up"></i> +{{ generalData.per_profit }}%
+                  </span>
+                  <span *ngIf="generalData.per_profit < 0" class="h2 font-weight-bold text-danger mb-0">
+                    <i class="fas fa-arrow-down"></i> {{ generalData.per_profit }}%
+                  </span>
+                  <span *ngIf="generalData.per_profit == 0" class="h2 font-weight-bold mb-0">
+                    <i class="fas fa-equals"></i> {{ generalData.per_profit }}%
+                  </span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-default text-white rounded-circle shadow">
+                    <i class="fas fa-percent"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body" placement="bottom" tooltipClass="help-tooltip" ngbTooltip="Calculated based on the first two previous values">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Current profit/loss ($)</h5>
+                  <span *ngIf="generalData.cur_profit > 0" class="h2 font-weight-bold text-success mb-0">
+                    <i class="fas fa-arrow-up"></i> +${{ generalData.cur_profit }}
+                  </span>
+                  <span *ngIf="generalData.cur_profit < 0" class="h2 font-weight-bold text-danger mb-0">
+                    <i class="fas fa-arrow-down"></i> -${{ generalData.cur_profit * -1 }}
+                  </span>
+                  <span *ngIf="generalData.cur_profit == 0" class="h2 font-weight-bold mb-0">
+                    <i class="fas fa-equals"></i> ${{ generalData.cur_profit }}
+                  </span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-default text-white rounded-circle shadow">
+                    <i class="fas fa-dollar-sign"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid p-3">
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row">
+            <div class="col-4 text-left">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-search"></i></span>
+                </div>
+                <input class="form-control" placeholder="Search asset" type="text" [(ngModel)]="searchAssetName">
+              </div>
+            </div>
+            <div class="col-8 text-right">
+              <button class="btn btn-success" (click)="openAddModal(addAssetModal)">Add</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="assets.length > 0" class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Invested</th>
+                <th scope="col">Profit/loss (%)</th>
+                <th scope="col">Profit/loss ($)</th>
+                <th scope="col">Market price</th>
+                <th scope="col">Last update</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let asset of assets | assetFilter: searchAssetName" [routerLink]="['/assets/view', asset.id]" class="asset">
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{ asset.name }}</span>
+                    </div>
+                  </div>
+                </th>
+                <td>
+                  {{ asset.quantity }}
+                </td>
+                <td>
+                  ${{ asset.invested }}
+                </td>
+                <td>
+                  <span *ngIf="asset.per_profit > 0" class="text-success">
+                    <i class="fas fa-arrow-up mr-2"></i>{{ asset.per_profit }}%
+                  </span>
+                  <span *ngIf="asset.per_profit < 0" class="text-danger">
+                    <i class="fas fa-arrow-down mr-2"></i>{{ asset.per_profit * -1 }}%
+                  </span>
+                  <span *ngIf="asset.per_profit == 0">
+                    <i class="fas fa-equals mr-2"></i>{{ asset.per_profit }}%
+                  </span>
+                </td>
+                <td>
+                  <span *ngIf="asset.cur_profit > 0" class="text-success">
+                    <i class="fas fa-arrow-up mr-2"></i>${{ asset.cur_profit }}
+                  </span>
+                  <span *ngIf="asset.cur_profit < 0" class="text-danger">
+                    <i class="fas fa-arrow-down mr-2"></i>${{ asset.cur_profit * -1 }}
+                  </span>
+                  <span *ngIf="asset.cur_profit == 0">
+                    <i class="fas fa-equals mr-2"></i>${{ asset.cur_profit }}
+                  </span>
+                </td>
+                <td>
+                  ${{ asset.market_price }}
+                </td>
+                <td>
+                  {{ asset.last_update | date }}
+                </td>
+                <td class="text-right">
+                  <button class="btn btn-sm btn-primary" (click)="openUpdateModal(updateAssetModal, asset.id); $event.stopPropagation();">Update</button>
+                  <button class="btn btn-sm btn-warning" (click)="openEditModal(editAssetModal, asset.id, asset.name); $event.stopPropagation();">Edit</button>
+                  <button class="btn btn-sm btn-danger" (click)="openDeleteModal(deleteAssetModal, asset.id, asset.name); $event.stopPropagation();">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="assets.length <= 0" class="empty-assets">
+          Without assets
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+
+<ng-template #addAssetModal let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title-default">Add asset</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d()">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <form>
+      <div class="modal-body">
+        <div class="form-group mb-0">
+          <label class="form-control-label" for="input-name">Asset name</label>
+          <input type="text" [formControl]="assetNameInput" id="input-name" class="form-control form-control-alternative" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="d()">Cancel</button>
+        <button type="button" class="btn btn-success ml-auto" (click)="c()" [disabled]="!assetNameInput.valid">Add</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #editAssetModal let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title-default">Edit asset: {{ assetName }}</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d()">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <form>
+      <div class="modal-body">
+        <div class="form-group mb-0">
+          <label class="form-control-label" for="input-name">New asset name</label>
+          <input type="text" [formControl]="assetNameInput" id="input-name" class="form-control form-control-alternative" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="d()">Cancel</button>
+        <button type="button" class="btn btn-warning ml-auto" (click)="c()" [disabled]="!assetNameInput.valid">Edit</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #deleteAssetModal let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title-default">Delete asset: {{ assetName }}</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d()">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      Do you want to delete the asset: {{ assetName }}?
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="d()">Cancel</button>
+      <button type="button" class="btn btn-danger ml-auto" (click)="c()">Delete</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #updateAssetModal let-c="close" let-d="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title-default">Update price market of asset</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d()">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <form (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <div class="form-group mb-0">
+          <label class="form-control-label" for="input-market-price">Current asset price in market</label>
+          <input type="number" [formControl]="marketPriceInput" id="input-market-price" class="form-control form-control-alternative" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="d()">Cancel</button>
+        <button type="button" class="btn btn-primary ml-auto" (click)="c()" [disabled]="!marketPriceInput.valid">Update</button>
+      </div>
+    </form>
+  </div>
+</ng-template>

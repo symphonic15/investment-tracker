@@ -1,0 +1,20 @@
+.market-price {
+  position: relative;
+}
+.market-price .market-price-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 1rem;
+}
+.table-title {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.empty-operations {
+    padding: 1.25rem 1.5rem;
+}
+.validation-error {
+  font-size: .8rem;
+}

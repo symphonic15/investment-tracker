@@ -1,0 +1,38 @@
+{
+  "name": "investment-tracker",
+  "version": "1.0.0",
+  "description": "A customizable investment tracker for your needs",
+  "main": "main.js",
+  "scripts": {
+    "start": "cd angular && ng build --output-path dist --base-href . && cd .. && electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.unjex.investment-tracker",
+    "productName": "Investment tracker",
+    "mac": {
+      "category": "investment.tracking"
+    },
+    "files": ["**/*", "angular/dist/**/*"],
+    "directories": {
+      "output": "dist"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icon.ico"
+    }
+  },
+  "keywords": ["investment", "tracker", "profit", "loss", "calculator", "personal", "customizable"],
+  "author": "Andres Sanchez",
+  "license": "GNU GPLv3",
+  "devDependencies": {
+    "@types/node": "^12.12.30",
+    "electron": "^8.1.1"
+  },
+  "dependencies": {
+    "electron-reload": "^1.5.0",
+    "lowdb": "^1.0.0"
+  }
+}

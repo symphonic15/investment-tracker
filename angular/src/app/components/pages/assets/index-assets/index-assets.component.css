@@ -1,0 +1,9 @@
+.asset {
+  cursor: pointer;
+}
+.asset:hover {
+  background-color: #fbfbfb;
+}
+.empty-assets {
+  padding: 1.25rem 1.5rem;
+}

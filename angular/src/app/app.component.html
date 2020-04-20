@@ -1,0 +1,44 @@
+<nav class="navbar navbar-vertical navbar-expand-md navbar-light bg-white" id="sidenav-main">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" (click)="isCollapsed=!isCollapsed"
+       aria-controls="sidenav-collapse-main">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand pt-0" routerLinkActive="active" [routerLink]="['/']">
+      <img src="./assets/img/logo.png" class="navbar-brand-img" alt="...">
+    </a>
+    <div class="collapse navbar-collapse"  [ngbCollapse]="isCollapsed" id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+          <li *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
+              <a routerLinkActive="active" [routerLink]="[menuItem.path]" class="nav-link">
+                  <i class="ni {{menuItem.icon}}"></i>
+                  {{menuItem.title}}
+              </a>
+          </li>
+      </ul>
+      <hr class="my-3">
+      <h6 class="navbar-heading text-muted">Top investments</h6>
+      <ul class="navbar-nav mb-md-3">
+        <li *ngFor="let assetLink of menuTopAssets" class="nav-item">
+          <a class="nav-link" [routerLink]="[assetLink.path]">
+            {{ assetLink.title }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="main-content">
+  <router-outlet></router-outlet>
+  <div class="container-fluid">
+    <footer class="footer">
+      <div class="row align-items-center justify-content-xl-between">
+        <div class="col-xl-12">
+          <div class="text-right text-muted">
+            Unjex.com
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

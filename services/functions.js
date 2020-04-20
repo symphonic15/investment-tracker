@@ -1,0 +1,258 @@
+const db = require('../db');
+
+const serviceFunctions = {
+  getMarketUpdates: function() {
+    return db.get('market_updates').value();
+  },
+  getGeneralData: function() {
+    var result = {
+      total_invested: 0.00,
+      total_investment_value: 0.00,
+      per_profit: 0.00,
+      cur_profit: 0.00
+    };
+    var assets;
+    var totalAssets = 0;
+  
+    assets = db.get('assets')
+      .value();
+  
+    assets.forEach(asset => {
+      totalAssets++;
+  
+      result.total_invested += asset.invested;
+      result.total_investment_value += asset.investment_value;
+      result.per_profit += asset.per_profit;
+      result.cur_profit += asset.cur_profit;
+    });
+  
+    result.per_profit = totalAssets != 0 ? (result.per_profit / totalAssets) : 0.00;
+  
+    return result;
+  },
+  getAllAssets: function() {
+    return db.get('assets').value();
+  },
+  getTopAssets: function() {
+    return db.get('assets')
+      .sortBy('invested')
+      .take(5)
+      .value();
+  },
+  getAsset: function(assetId) {
+    return db.get('assets')
+      .find({ id: parseInt(assetId) })
+      .value();
+  },
+  addAsset: function(asset) {
+    db.update('assets_count', n => n + 1)
+      .write();
+    asset.id = db.get('assets_count').value();
+
+    return db.get('assets')
+      .push(asset)
+      .write();
+  },
+  editAsset: function(assetId, assetName) {
+    db.get('assets')
+      .find({ id: parseInt(assetId) })
+      .assign({ name: assetName })
+      .write();
+    
+    return this.getAllAssets();
+  },
+  deleteAsset: function(assetId) {
+    db.get('assets')
+      .remove({ id: parseInt(assetId) })
+      .write();
+    
+    return this.getAllAssets();
+  },
+  updateAssetInvestment: function(assetId) {
+    investmentValue = 0;
+    asset = this.getAsset(assetId);
+
+    investmentValue = asset.quantity * asset.market_price;
+
+    db.get('assets')
+      .find({ id: parseInt(asset.id) })
+      .assign({
+        investment_value: parseFloat(investmentValue.toFixed(2))
+      })
+      .write();
+  },
+  updateAssetInvested: function(assetId) {
+    var averageUnityPrice = 0;
+    var invested = 0;
+    var quantity = 0;
+    
+    asset = this.getAsset(assetId);
+
+    // Adds buys to invested value
+    asset.operations.forEach(operation => {
+      if(operation.type == 'B') {
+        operationValue = operation.quantity * operation.price;
+        invested += operationValue;
+        quantity += operation.quantity;
+      }
+    });
+
+    // Get average price per unity
+    averageUnityPrice = invested / quantity;
+
+    // Subtracts sells of invested value
+    asset.operations.forEach(operation => {
+      if(operation.type == 'S') {
+        operationValue = operation.quantity * averageUnityPrice;
+        invested -= operationValue;
+        quantity -= operation.quantity;
+      }
+    });
+
+    db.get('assets')
+      .find({ id: parseInt(asset.id) })
+      .assign({
+        invested: parseFloat(invested.toFixed(2)),
+        quantity: parseFloat(quantity)
+      })
+      .write();
+  },
+  updateAssetProfit: function(assetId, marketPrice) {
+    var asset, totalInvested, totalMarketValue, perProfit, curProfit, lastUpdate;
+
+    if(marketPrice) {
+      db.get('assets')
+        .find({ id: parseInt(assetId) })
+        .assign({ market_price: marketPrice })
+        .write();
+    }
+
+    asset = this.getAsset(assetId);
+
+    if(asset.market_price) {
+      totalInvested = asset.invested;
+      totalMarketValue = asset.quantity * asset.market_price;
+      perProfit = totalInvested > 0 ? ((totalMarketValue * 100 / totalInvested) - 100) : 0;
+      curProfit = totalMarketValue - totalInvested;
+
+      lastUpdate = new Date;
+      lastUpdate = new Date(lastUpdate.getFullYear(), lastUpdate.getMonth(), lastUpdate.getDate());
+
+      db.get('assets')
+        .find({ id: parseInt(assetId) })
+        .assign({
+          investment_value: parseFloat(totalInvested + curProfit),
+          per_profit: parseFloat(perProfit.toFixed(2)),
+          cur_profit: parseFloat(curProfit.toFixed(2)),
+          last_update: lastUpdate })
+        .write();
+      
+      this.addMarketUpdate();
+    }
+  },
+  getAllOperations: function() {
+    assets = this.getAllAssets();
+    operations = [];
+
+    assets.forEach(asset => {
+      asset.operations.forEach(operation => {
+        operation.asset_name = asset.name;
+        operations.push(operation);
+      });
+    });
+
+    return operations;
+  },
+  getOperation: function(assetId, operationId) {
+    return db.get('assets')
+      .find({ id: parseInt(assetId) })
+      .get('operations')
+      .find({ id: parseInt(operationId) })
+      .value();
+  },
+  addOperation: function(assetId, operation) {
+    var operations = db.get('assets')
+      .find({ id: parseInt(assetId) })
+      .get('operations')
+      .value();
+
+    operation.id = db.get('assets')
+      .find({ id: parseInt(assetId) })
+      .get('operations_count')
+      .value() + 1;
+
+    operations.push(operation);
+    db.get('assets')
+      .find({ id: assetId })
+      .assign({ operations })
+      .write();
+    
+    db.get('assets')
+      .find({ id: parseInt(assetId) })
+      .update('operations_count', n => n + 1)
+      .write();
+
+    this.updateAssetInvested(assetId);
+
+    if(operation.type == 'B') {
+      this.updateAssetProfit(assetId, operation.price);
+    } else {
+      this.updateAssetProfit(assetId);
+    }
+
+    this.updateAssetInvestment(assetId);
+
+    return this.getAsset(assetId);
+  },
+  deleteOperation: function(assetId, operationId) {
+    db.get('assets')
+      .find({ id: parseInt(assetId) })
+      .get('operations')
+      .remove({ id: parseInt(operationId) })
+      .write();
+    
+    this.updateAssetInvested(assetId);
+    this.updateAssetProfit(assetId);
+    this.updateAssetInvestment(assetId);
+
+    return this.getAsset(assetId);
+  },
+  addMarketUpdate: function() {
+    var marketUpdate = {
+      total_invested: null,
+      per_profit: null,
+      cur_profit: null,
+      date: null
+    };
+    var assets;
+    var totalAssets = 0;
+    const currentDate = new Date();
+  
+    assets = db.get('assets')
+      .value();
+  
+    assets.forEach(asset => {
+      totalAssets++;
+  
+      marketUpdate.total_invested += asset.invested;
+      marketUpdate.per_profit += asset.per_profit;
+      marketUpdate.cur_profit += asset.cur_profit;
+    });
+  
+    marketUpdate.per_profit = marketUpdate.per_profit / totalAssets;
+    marketUpdate.date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  
+    if(db.get('market_updates').find({ date: marketUpdate.date }).value()) {
+      db.get('market_updates')
+        .find({ date: marketUpdate.date })
+        .assign(marketUpdate)
+        .write();
+    } else {
+      db.get('market_updates')
+        .push(marketUpdate)
+        .write();
+    }
+  }
+}
+
+module.exports = serviceFunctions;

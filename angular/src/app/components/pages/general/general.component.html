@@ -1,0 +1,66 @@
+<div class="header bg-gradient-default pb-4 pt-4">
+  <div class="container-fluid">
+    <h2 class="text-secondary mb-0">General</h2>
+  </div>
+</div>
+<div class="container-fluid p-3">
+  <div class="card bg-gradient-default shadow mb-3">
+    <div class="card-header bg-transparent">
+      <h2 class="text-white mb-0">Profit/loss</h2>
+    </div>
+    <div class="card-body">
+      <div class="chart">
+        <canvas id="chart-sales" class="chart-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="card shadow">
+    <div class="card-header border-0">
+      <h3 class="table-title mb-0">Last operations</h3>
+    </div>
+    <div *ngIf="operations.length > 0" class="table-responsive">
+      <table class="table align-items-center table-flush">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Asset</th>
+            <th scope="col">Type</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price per unit</th>
+            <th scope="col">Total price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let operation of operations">
+            <th scope="row">
+              <div class="media align-items-center">
+                <div class="media-body">
+                  <span class="mb-0 text-sm">{{ operation.date | date }}</span>
+                </div>
+              </div>
+            </th>
+            <td>
+              {{ operation.asset_name }}
+            </td>
+            <td>
+              <span *ngIf="operation.type == 'B'" class="text-success">Purchase</span>
+              <span *ngIf="operation.type == 'S'" class="text-danger">Sale</span>
+            </td>
+            <td>
+              ${{ operation.quantity }}
+            </td>
+            <td>
+              ${{ operation.price }}
+            </td>
+            <td>
+              ${{ operation.quantity * operation.price }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="operations.length <= 0" class="empty-operations">
+      Without operations
+    </div>
+  </div>
+</div>

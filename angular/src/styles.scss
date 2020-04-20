@@ -1,0 +1,11 @@
+.help-tooltip {
+  opacity: 1 !important;
+}
+.help-tooltip .tooltip-inner {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #c4c4c4;
+}
+.help-tooltip .arrow::before {
+  display: none;
+}
