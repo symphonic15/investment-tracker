@@ -14,7 +14,10 @@
     "mac": {
       "category": "investment.tracking"
     },
-    "files": ["**/*", "angular/dist/**/*"],
+    "files": [
+      "**/*",
+      "angular/dist/**/*"
+    ],
     "directories": {
       "output": "dist"
     },
@@ -24,7 +27,15 @@
       "installerIcon": "build/icon.ico"
     }
   },
-  "keywords": ["investment", "tracker", "profit", "loss", "calculator", "personal", "customizable"],
+  "keywords": [
+    "investment",
+    "tracker",
+    "profit",
+    "loss",
+    "calculator",
+    "personal",
+    "customizable"
+  ],
   "author": "Andres Sanchez",
   "license": "GNU GPLv3",
   "devDependencies": {
