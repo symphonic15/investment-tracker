@@ -1,6 +1,29 @@
+const { app, dialog } = require('electron');
+const util = require("util");
+const fs = require('fs');
 const db = require('../db');
 
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
+
 const serviceFunctions = {
+  getDatabasePath: function() {
+    return app.getPath('userData')+"/db.json";
+  },
+  importDatabaseFile: async function() {
+    var files = await dialog.showOpenDialogSync({ properties: ['openFile', 'multiSelections'] });
+
+    if(files) {
+      try {
+        let content = await readFile(files[0], 'utf-8');
+        await writeFile(this.getDatabasePath(), content);
+      } catch(error) {
+        throw error;
+      }
+    }
+
+    return db.read();
+  },
   getMarketUpdates: function() {
     return db.get('market_updates').value();
   },
@@ -37,7 +60,8 @@ const serviceFunctions = {
     return db.get('assets')
       .sortBy('invested')
       .take(5)
-      .value();
+      .value()
+      .reverse();
   },
   getAsset: function(assetId) {
     return db.get('assets')

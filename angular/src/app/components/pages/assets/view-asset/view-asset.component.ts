@@ -4,6 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IpcService } from 'src/app/services/ipc.service';
+import { EventEmitterService } from 'src/app/services/event-emitter.service';
 
 import { Asset } from 'src/app/models/asset.interface';
 
@@ -25,7 +26,8 @@ export class ViewAssetComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private ipcService: IpcService
+    private ipcService: IpcService,
+    private eventEmitterService: EventEmitterService
   ) {
     this.assetId = this.route.snapshot.params.assetId;
     this.asset = this.ipcService.getAsset(this.assetId);
@@ -63,6 +65,8 @@ export class ViewAssetComponent implements OnInit {
       } else {
         this.asset = this.ipcService.addOperation(this.assetId, data);
       }
+
+      this.eventEmitterService.onAssetsChanged();
     }, () => {});
 
     this.operationForm = this.formBuilder.group({
@@ -76,6 +80,7 @@ export class ViewAssetComponent implements OnInit {
   openDeleteModal(content, operationId) {
     this.modalService.open(content, { centered: true }).result.then(() => {
       this.asset = this.ipcService.deleteOperation(this.assetId, operationId);
+      this.eventEmitterService.onAssetsChanged();
     }, () => {});
   }
 

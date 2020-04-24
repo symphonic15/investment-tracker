@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule  } from '@angular/platform-browser';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, Router } from '@angular/router';
 
 import { IndexAssetsComponent } from './components/pages/assets/index-assets/index-assets.component';
 import { ViewAssetComponent } from './components/pages/assets/view-asset/view-asset.component';
@@ -25,4 +25,10 @@ const routes: Routes = [
   exports: [
   ],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+  constructor(private router: Router) {
+    this.router.routeReuseStrategy.shouldReuseRoute = function() {
+      return false;
+    };
+  }
+}

@@ -1,8 +1,22 @@
 const { ipcMain } = require('electron');
 const serviceFunctions = require('./functions');
 
+/* FILES */
+
+// Get user database path
+ipcMain.on('get-database-path', (event) => {
+  event.returnValue = serviceFunctions.getDatabasePath();
+});
+
+// Replace database
+ipcMain.on('import-database', async (event) => {
+  await serviceFunctions.importDatabaseFile();
+  event.returnValue = null;
+});
+
 /* GENERAL */
 
+// Get all realized market updates
 ipcMain.on('get-market-updates', (event) => {
   event.returnValue = serviceFunctions.getMarketUpdates();
 });

@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IpcService } from 'src/app/services/ipc.service';
+import { EventEmitterService } from 'src/app/services/event-emitter.service';
 
 declare interface RouteInfo {
   path: string;
@@ -9,10 +12,6 @@ declare interface RouteInfo {
   icon: string;
   class: string;
 }
-export const ROUTES: RouteInfo[] = [
-  { path: '/general', title: 'General',  icon:'fas fa-desktop text-primary', class: '' },
-  { path: '/assets/index', title: 'My investments',  icon:'fas fa-chart-bar text-primary', class: '' }
-];
 
 @Component({
   selector: 'app-root',
@@ -22,28 +21,46 @@ export const ROUTES: RouteInfo[] = [
 export class AppComponent {
   public menuItems: any[];
   public menuTopAssets: any[];
+  public databasePath: SafeUrl;
   public isCollapsed = true;
 
   constructor(
     private router: Router,
-    private ipcService: IpcService
+    private ipcService: IpcService,
+    private DOMSanitizer: DomSanitizer,
+    private modalService: NgbModal,
+    private eventEmitterService: EventEmitterService
   ) {}
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
+    this.getTopAssets();
 
-    const topAssets = this.ipcService.getTopAssets();
+    this.databasePath = this.DOMSanitizer.bypassSecurityTrustUrl(this.ipcService.getDatabasePath());
+
+    if (this.eventEmitterService.refreshTopAssetsSub == undefined) {
+      this.eventEmitterService.refreshTopAssetsSub = this.eventEmitterService.refreshTopAssets.subscribe(() => {
+        this.getTopAssets();
+      });
+    }
+  }
+
+  getTopAssets() {
+    let topAssets = this.ipcService.getTopAssets();
     let topAssetsLinks: any[] = [];
 
     topAssets.forEach(function(asset) {
-      let assetLink = {path: '/assets/view/'+asset.id, title: asset.name }
+      let assetLink = { path: '/assets/view/'+asset.id, title: asset.name }
       topAssetsLinks.push(assetLink);
     });
 
     this.menuTopAssets = topAssetsLinks;
+  }
 
-    this.router.events.subscribe((event) => {
-      this.isCollapsed = true;
-   });
+  openImportModal(content) {
+    this.modalService.open(content, { centered: true }).result.then(() => {
+      this.ipcService.importDatabase();
+      this.getTopAssets();
+      this.router.navigate(['/']);
+    }, () => {});
   }
 }

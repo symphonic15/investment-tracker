@@ -13,6 +13,17 @@ export class IpcService {
     private electronService: ElectronService
   ) { }
 
+  /* FILES */
+
+  // Get user database path
+  getDatabasePath() {
+    return this.electronService.ipcRenderer.sendSync('get-database-path');
+  }
+
+  // Import database file (replace current one)
+  importDatabase() {
+    return this.electronService.ipcRenderer.sendSync('import-database');
+  }
 
   /* GENERAL */
 

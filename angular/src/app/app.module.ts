@@ -9,7 +9,10 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // Pipes
-import { AssetFilter } from './pipes/asset-filter.pipe'
+import { AssetFilter } from './pipes/asset-filter.pipe';
+
+// Services
+import { EventEmitterService } from './services/event-emitter.service';
 
 // Components
 import { AppComponent } from './app.component';
@@ -40,7 +43,9 @@ import { AppRoutingModule } from './app.routing';
     ViewAssetComponent,
     GeneralComponent
   ],
-  providers: [],
+  providers: [
+    EventEmitterService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IpcService } from 'src/app/services/ipc.service';
+import { EventEmitterService } from 'src/app/services/event-emitter.service';
 
 import { Asset } from 'src/app/models/asset.interface';
 
@@ -22,7 +23,8 @@ export class IndexAssetsComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private ipcService: IpcService
+    private ipcService: IpcService,
+    private eventEmitterService: EventEmitterService
   ) {
     this.assets = this.ipcService.getAllAssets();
     this.generalData = this.ipcService.getGeneralData();
@@ -36,6 +38,7 @@ export class IndexAssetsComponent implements OnInit {
   openAddModal(content) {
     this.modalService.open(content, { centered: true }).result.then(() => {
       this.assets = this.ipcService.addAsset(this.assetNameInput.value);
+      this.eventEmitterService.onAssetsChanged();
     }, () => {});
 
     this.assetNameInput.setValue('');
@@ -47,6 +50,7 @@ export class IndexAssetsComponent implements OnInit {
 
     this.modalService.open(content, { centered: true }).result.then(() => {
       this.assets = this.ipcService.editAsset(assetId, this.assetNameInput.value);
+      this.eventEmitterService.onAssetsChanged();
     }, () => {});
 
     this.assetNameInput.setValue('');
@@ -58,6 +62,7 @@ export class IndexAssetsComponent implements OnInit {
     this.modalService.open(content, { centered: true }).result.then(() => {
       this.assets = this.ipcService.deleteAsset(assetId);
       this.generalData = this.ipcService.getGeneralData();
+      this.eventEmitterService.onAssetsChanged();
     }, () => {});
 
     this.assetName = null;
