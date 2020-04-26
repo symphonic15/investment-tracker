@@ -57,7 +57,7 @@ export class ViewAssetComponent implements OnInit {
 
       if(data.type == 'S') {
         if(data.quantity > this.asset.quantity) {
-          this.validationError = "No dispone de esa cantidad";
+          this.validationError = "You do not have that amount";
           this.openAddModal(content);
         } else {
           this.asset = this.ipcService.addOperation(this.assetId, data);

@@ -165,7 +165,7 @@ const serviceFunctions = {
       db.get('assets')
         .find({ id: parseInt(assetId) })
         .assign({
-          investment_value: parseFloat(totalInvested + curProfit),
+          investment_value: parseFloat((totalInvested + curProfit).toFixed(2)),
           per_profit: parseFloat(perProfit.toFixed(2)),
           cur_profit: parseFloat(curProfit.toFixed(2)),
           last_update: lastUpdate })
