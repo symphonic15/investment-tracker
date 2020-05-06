@@ -6,7 +6,7 @@
 <div class="container-fluid p-3">
   <div class="card bg-gradient-default shadow mb-3">
     <div class="card-header bg-transparent">
-      <h2 class="text-white mb-0">Profit/loss</h2>
+      <h2 class="text-white mb-0">Recorded profit/loss</h2>
     </div>
     <div class="card-body">
       <div class="chart">
@@ -35,7 +35,7 @@
             <th scope="row">
               <div class="media align-items-center">
                 <div class="media-body">
-                  <span class="mb-0 text-sm">{{ operation.date | date }}</span>
+                  <span class="mb-0 text-sm">{{ operation.date | date : 'longDate' : 'GMT' }}</span>
                 </div>
               </div>
             </th>
@@ -47,13 +47,13 @@
               <span *ngIf="operation.type == 'S'" class="text-danger">Sale</span>
             </td>
             <td>
-              ${{ operation.quantity }}
+              {{ operation.quantity }}
             </td>
             <td>
               ${{ operation.price }}
             </td>
             <td>
-              ${{ operation.quantity * operation.price }}
+              ${{ (operation.quantity * operation.price).toFixed(2) }}
             </td>
           </tr>
         </tbody>

@@ -50,6 +50,11 @@ const serviceFunctions = {
     });
   
     result.per_profit = totalAssets != 0 ? (result.per_profit / totalAssets) : 0.00;
+
+    result.total_invested = result.total_invested.toFixed(2);
+    result.total_investment_value = result.total_investment_value.toFixed(2);
+    result.per_profit = result.per_profit.toFixed(2);
+    result.cur_profit = result.cur_profit.toFixed(2);
   
     return result;
   },

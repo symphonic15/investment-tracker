@@ -126,8 +126,8 @@
             <tbody>
               <tr *ngFor="let operation of asset.operations">
                 <td>
-                  <span *ngIf="operation.type == 'B'" class="text-success">Buy</span>
-                  <span *ngIf="operation.type == 'S'" class="text-danger">Sell</span>
+                  <span *ngIf="operation.type == 'B'" class="text-success">Purchase</span>
+                  <span *ngIf="operation.type == 'S'" class="text-danger">Sale</span>
                 </td>
                 <td>
                   {{ operation.quantity }}
@@ -136,7 +136,7 @@
                   {{ operation.price }}
                 </td>
                 <td>
-                  <span class="badge badge-dot mr-4">{{ operation.date | date }}</span>
+                  <span class="badge badge-dot mr-4">{{ operation.date | date : 'longDate' : 'GMT' }}</span>
                 </td>
                 <td class="text-right">
                   <button *ngIf="operation.id == asset.operations_count" class="btn btn-sm btn-danger" (click)="openDeleteModal(deleteOperationModal, operation.id); $event.stopPropagation();">Delete</button>
