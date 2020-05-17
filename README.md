@@ -1,6 +1,8 @@
 # Investment Tracker
 **A customizable program designed to obtain all the general information of our current investments in the market, categorizing all by assets and giving data like current investment values, profits and losses, history graphics, last purchases and sales doed and more..**
 
+[Documentation in spanish](https://unjex.com/projects/investment-tracker)
+
 ### Simple use
 - Download and install the latest version: [Investment Tracker 1.1.0](https://github.com/symphonic15/investment-tracker/releases/download/v1.1.0/InvestmentTrackerSetup-1.1.0.rar)
 - Open the program, go to "My investments" and add your first asset.
