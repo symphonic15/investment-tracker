@@ -51,10 +51,10 @@ const serviceFunctions = {
   
     result.per_profit = totalAssets != 0 ? (result.per_profit / totalAssets) : 0.00;
 
-    result.total_invested = result.total_invested.toFixed(2);
-    result.total_investment_value = result.total_investment_value.toFixed(2);
-    result.per_profit = result.per_profit.toFixed(2);
-    result.cur_profit = result.cur_profit.toFixed(2);
+    result.total_invested = result.total_invested;
+    result.total_investment_value = result.total_investment_value;
+    result.per_profit = result.per_profit;
+    result.cur_profit = result.cur_profit;
   
     return result;
   },
@@ -106,7 +106,7 @@ const serviceFunctions = {
     db.get('assets')
       .find({ id: parseInt(asset.id) })
       .assign({
-        investment_value: parseFloat(investmentValue.toFixed(2))
+        investment_value: parseFloat(investmentValue)
       })
       .write();
   },
@@ -141,7 +141,7 @@ const serviceFunctions = {
     db.get('assets')
       .find({ id: parseInt(asset.id) })
       .assign({
-        invested: parseFloat(invested.toFixed(2)),
+        invested: parseFloat(invested),
         quantity: parseFloat(quantity)
       })
       .write();
@@ -170,9 +170,9 @@ const serviceFunctions = {
       db.get('assets')
         .find({ id: parseInt(assetId) })
         .assign({
-          investment_value: parseFloat((totalInvested + curProfit).toFixed(2)),
-          per_profit: parseFloat(perProfit.toFixed(2)),
-          cur_profit: parseFloat(curProfit.toFixed(2)),
+          investment_value: parseFloat((totalInvested + curProfit)),
+          per_profit: parseFloat(perProfit),
+          cur_profit: parseFloat(curProfit),
           last_update: lastUpdate })
         .write();
       

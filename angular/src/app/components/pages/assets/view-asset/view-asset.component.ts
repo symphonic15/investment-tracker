@@ -33,7 +33,7 @@ export class ViewAssetComponent implements OnInit {
     this.asset = this.ipcService.getAsset(this.assetId);
 
     // Sort operations by date
-    this.asset.operations.sort((a, b)=> new Date(a.date).getTime() - new Date(b.date).getTime());
+    this.asset.operations.sort((a, b)=> new Date(b.date).getTime() - new Date(a.date).getTime());
 
     this.operationForm = this.formBuilder.group({
       type: [null, Validators.required],

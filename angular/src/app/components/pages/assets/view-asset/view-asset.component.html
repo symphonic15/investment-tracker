@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <h4 class="mb-0 text-secondary">{{ asset.name }}</h4>
     <div class="market-price mb-2" style="position: relative;">
-      <p *ngIf="asset.market_price" class="d-inline-block h1 display-3 text-secondary mb-0">${{ asset.market_price }}</p>
+      <p *ngIf="asset.market_price" class="d-inline-block h1 display-3 text-secondary mb-0">${{ (asset.market_price).toFixed(2) }}</p>
       <p *ngIf="!asset.market_price" class="d-inline-block h1 display-3 text-secondary mb-0">Market price not defined</p>
       <button class="btn btn-sm btn-primary market-price-btn" (click)="openUpdateModal(updateAssetModal)">Update</button>
     </div>
@@ -14,7 +14,7 @@
               <div class="row">
                 <div class="col">
                   <h5 class="card-title text-uppercase text-muted mb-0">Current invested</h5>
-                  <span class="h2 font-weight-bold mb-0">${{ asset.invested }}</span>
+                  <span class="h2 font-weight-bold mb-0">${{ (asset.invested).toFixed(2) }}</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-default text-white rounded-circle shadow">
@@ -31,9 +31,9 @@
               <div class="row">
                 <div class="col">
                   <h5 class="card-title text-uppercase text-muted mb-0">Current investment value</h5>
-                  <span *ngIf="asset.investment_value > asset.invested" class="h2 font-weight-bold text-success mb-0">${{ asset.investment_value }}</span>
-                  <span *ngIf="asset.investment_value < asset.invested" class="h2 font-weight-bold text-danger mb-0">${{ asset.investment_value }}</span>
-                  <span *ngIf="asset.investment_value == asset.invested" class="h2 font-weight-bold mb-0">${{ asset.investment_value }}</span>
+                  <span *ngIf="asset.investment_value > asset.invested" class="h2 font-weight-bold text-success mb-0">${{ (asset.investment_value).toFixed(2) }}</span>
+                  <span *ngIf="asset.investment_value < asset.invested" class="h2 font-weight-bold text-danger mb-0">${{ (asset.investment_value).toFixed(2) }}</span>
+                  <span *ngIf="asset.investment_value == asset.invested" class="h2 font-weight-bold mb-0">${{ (asset.investment_value).toFixed(2) }}</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-default text-white rounded-circle shadow">
@@ -51,13 +51,13 @@
                 <div class="col">
                   <h5 class="card-title text-uppercase text-muted mb-0">Current profit/loss (%)</h5>
                   <span *ngIf="asset.per_profit > 0" class="h2 font-weight-bold text-success mb-0">
-                    <i class="fas fa-arrow-up"></i> +{{ asset.per_profit }}%
+                    <i class="fas fa-arrow-up"></i> +{{ (asset.per_profit).toFixed(2) }}%
                   </span>
                   <span *ngIf="asset.per_profit < 0" class="h2 font-weight-bold text-danger mb-0">
-                    <i class="fas fa-arrow-down"></i> {{ asset.per_profit }}%
+                    <i class="fas fa-arrow-down"></i> {{ (asset.per_profit).toFixed(2) }}%
                   </span>
                   <span *ngIf="asset.per_profit == 0" class="h2 font-weight-bold mb-0">
-                    <i class="fas fa-equals"></i> {{ asset.per_profit }}%
+                    <i class="fas fa-equals"></i> {{ (asset.per_profit).toFixed(2) }}%
                   </span>
                 </div>
                 <div class="col-auto">
@@ -76,13 +76,13 @@
                 <div class="col">
                   <h5 class="card-title text-uppercase text-muted mb-0">Current profit/loss ($)</h5>
                   <span *ngIf="asset.cur_profit > 0" class="h2 font-weight-bold text-success mb-0">
-                    <i class="fas fa-arrow-up"></i> +${{ asset.cur_profit }}
+                    <i class="fas fa-arrow-up"></i> +${{ (asset.cur_profit).toFixed(2) }}
                   </span>
                   <span *ngIf="asset.cur_profit < 0" class="h2 font-weight-bold text-danger mb-0">
-                    <i class="fas fa-arrow-down"></i> -${{ asset.cur_profit * -1 }}
+                    <i class="fas fa-arrow-down"></i> -${{ (asset.cur_profit * -1).toFixed(2) }}
                   </span>
                   <span *ngIf="asset.cur_profit == 0" class="h2 font-weight-bold mb-0">
-                    <i class="fas fa-equals"></i> ${{ asset.cur_profit }}
+                    <i class="fas fa-equals"></i> ${{ (asset.cur_profit).toFixed(2) }}
                   </span>
                 </div>
                 <div class="col-auto">
@@ -118,7 +118,7 @@
               <tr>
                 <th scope="col">Type</th>
                 <th scope="col">Quantity</th>
-                <th scope="col">Market price</th>
+                <th scope="col">Unit price</th>
                 <th scope="col">Date</th>
                 <th scope="col"></th>
               </tr>
@@ -133,7 +133,7 @@
                   {{ operation.quantity }}
                 </td>
                 <td>
-                  {{ operation.price }}
+                  ${{ (operation.price).toFixed(2) }}
                 </td>
                 <td>
                   <span class="badge badge-dot mr-4">{{ operation.date | date : 'longDate' : 'GMT' }}</span>
@@ -181,7 +181,7 @@
           <span class="text-danger validation-error">{{ validationError }}</span>
         </div>
         <div class="form-group">
-          <label class="form-control-label" for="input-price">Price per unit</label>
+          <label class="form-control-label" for="input-price">Unit price</label>
           <input type="number" formControlName="price" id="input-price" class="form-control form-control-alternative" required>
         </div>
         <div class="form-group mb-0">

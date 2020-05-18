@@ -9,7 +9,7 @@
               <div class="row">
                 <div class="col">
                   <h5 class="card-title text-uppercase text-muted mb-0">Total invested</h5>
-                  <span class="h2 font-weight-bold mb-0">${{ generalData.total_invested }}</span>
+                  <span class="h2 font-weight-bold mb-0">${{ (generalData.total_invested).toFixed(2) }}</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-default text-white rounded-circle shadow">
@@ -26,9 +26,9 @@
               <div class="row">
                 <div class="col">
                   <h5 class="card-title text-uppercase text-muted mb-0">Current investment value</h5>
-                  <span *ngIf="generalData.total_investment_value > generalData.total_invested" class="h2 font-weight-bold text-success mb-0">${{ generalData.total_investment_value }}</span>
-                  <span *ngIf="generalData.total_investment_value < generalData.total_invested" class="h2 font-weight-bold text-danger mb-0">${{ generalData.total_investment_value }}</span>
-                  <span *ngIf="generalData.total_investment_value == generalData.total_invested" class="h2 font-weight-bold mb-0">${{ generalData.total_investment_value }}</span>
+                  <span *ngIf="generalData.total_investment_value > generalData.total_invested" class="h2 font-weight-bold text-success mb-0">${{ (generalData.total_investment_value).toFixed(2) }}</span>
+                  <span *ngIf="generalData.total_investment_value < generalData.total_invested" class="h2 font-weight-bold text-danger mb-0">${{ (generalData.total_investment_value).toFixed(2) }}</span>
+                  <span *ngIf="generalData.total_investment_value == generalData.total_invested" class="h2 font-weight-bold mb-0">${{ (generalData.total_investment_value).toFixed(2) }}</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-default text-white rounded-circle shadow">
@@ -46,13 +46,13 @@
                 <div class="col">
                   <h5 class="card-title text-uppercase text-muted mb-0">Current profit/loss (%)</h5>
                   <span *ngIf="generalData.per_profit > 0" class="h2 font-weight-bold text-success mb-0">
-                    <i class="fas fa-arrow-up"></i> +{{ generalData.per_profit }}%
+                    <i class="fas fa-arrow-up"></i> +{{ (generalData.per_profit).toFixed(2) }}%
                   </span>
                   <span *ngIf="generalData.per_profit < 0" class="h2 font-weight-bold text-danger mb-0">
-                    <i class="fas fa-arrow-down"></i> {{ generalData.per_profit }}%
+                    <i class="fas fa-arrow-down"></i> {{ (generalData.per_profit).toFixed(2) }}%
                   </span>
                   <span *ngIf="generalData.per_profit == 0" class="h2 font-weight-bold mb-0">
-                    <i class="fas fa-equals"></i> {{ generalData.per_profit }}%
+                    <i class="fas fa-equals"></i> {{ (generalData.per_profit).toFixed(2) }}%
                   </span>
                 </div>
                 <div class="col-auto">
@@ -71,13 +71,13 @@
                 <div class="col">
                   <h5 class="card-title text-uppercase text-muted mb-0">Current profit/loss ($)</h5>
                   <span *ngIf="generalData.cur_profit > 0" class="h2 font-weight-bold text-success mb-0">
-                    <i class="fas fa-arrow-up"></i> +${{ generalData.cur_profit }}
+                    <i class="fas fa-arrow-up"></i> +${{ (generalData.cur_profit).toFixed(2) }}
                   </span>
                   <span *ngIf="generalData.cur_profit < 0" class="h2 font-weight-bold text-danger mb-0">
-                    <i class="fas fa-arrow-down"></i> -${{ generalData.cur_profit * -1 }}
+                    <i class="fas fa-arrow-down"></i> -${{ (generalData.cur_profit * -1).toFixed(2) }}
                   </span>
                   <span *ngIf="generalData.cur_profit == 0" class="h2 font-weight-bold mb-0">
-                    <i class="fas fa-equals"></i> ${{ generalData.cur_profit }}
+                    <i class="fas fa-equals"></i> ${{ (generalData.cur_profit).toFixed(2) }}
                   </span>
                 </div>
                 <div class="col-auto">
@@ -139,32 +139,32 @@
                   {{ asset.quantity }}
                 </td>
                 <td>
-                  ${{ asset.invested }}
+                  ${{ (asset.invested).toFixed(2) }}
                 </td>
                 <td>
                   <span *ngIf="asset.per_profit > 0" class="text-success">
-                    <i class="fas fa-arrow-up mr-2"></i>{{ asset.per_profit }}%
+                    <i class="fas fa-arrow-up mr-2"></i>{{ (asset.per_profit).toFixed(2) }}%
                   </span>
                   <span *ngIf="asset.per_profit < 0" class="text-danger">
-                    <i class="fas fa-arrow-down mr-2"></i>{{ asset.per_profit * -1 }}%
+                    <i class="fas fa-arrow-down mr-2"></i>{{ (asset.per_profit * -1).toFixed(2) }}%
                   </span>
                   <span *ngIf="asset.per_profit == 0">
-                    <i class="fas fa-equals mr-2"></i>{{ asset.per_profit }}%
+                    <i class="fas fa-equals mr-2"></i>{{ (asset.per_profit).toFixed(2) }}%
                   </span>
                 </td>
                 <td>
                   <span *ngIf="asset.cur_profit > 0" class="text-success">
-                    <i class="fas fa-arrow-up mr-2"></i>${{ asset.cur_profit }}
+                    <i class="fas fa-arrow-up mr-2"></i>${{ (asset.cur_profit).toFixed(2) }}
                   </span>
                   <span *ngIf="asset.cur_profit < 0" class="text-danger">
-                    <i class="fas fa-arrow-down mr-2"></i>${{ asset.cur_profit * -1 }}
+                    <i class="fas fa-arrow-down mr-2"></i>${{ (asset.cur_profit * -1).toFixed(2) }}
                   </span>
                   <span *ngIf="asset.cur_profit == 0">
-                    <i class="fas fa-equals mr-2"></i>${{ asset.cur_profit }}
+                    <i class="fas fa-equals mr-2"></i>${{ (asset.cur_profit).toFixed(2) }}
                   </span>
                 </td>
                 <td>
-                  ${{ asset.market_price }}
+                  ${{ (asset.market_price).toFixed(2) }}
                 </td>
                 <td>
                   {{ asset.last_update | date }}
