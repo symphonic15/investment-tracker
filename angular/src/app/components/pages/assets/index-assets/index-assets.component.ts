@@ -52,8 +52,6 @@ export class IndexAssetsComponent implements OnInit {
       this.assets = this.ipcService.editAsset(assetId, this.assetNameInput.value);
       this.eventEmitterService.onAssetsChanged();
     }, () => {});
-
-    this.assetNameInput.setValue('');
   }
 
   openDeleteModal(content, assetId, assetName) {
@@ -64,17 +62,14 @@ export class IndexAssetsComponent implements OnInit {
       this.generalData = this.ipcService.getGeneralData();
       this.eventEmitterService.onAssetsChanged();
     }, () => {});
-
-    this.assetName = null;
   }
 
   openUpdateModal(content, assetId) {
+    this.marketPriceInput.setValue('');
     this.modalService.open(content, { centered: true }).result.then(() => {
       this.ipcService.updateAssetProfit(assetId, this.marketPriceInput.value);
       this.assets = this.ipcService.getAllAssets();
       this.generalData = this.ipcService.getGeneralData();
     }, () => {});
-
-    this.marketPriceInput.setValue('');
   }
 }

@@ -35,7 +35,7 @@ export class GeneralComponent implements OnInit {
     var labels = ['Start'];
     labels.push.apply(labels, this.marketUpdates.map(x => x.date));
     var datasets = [0];
-    datasets.push.apply(datasets, this.marketUpdates.map(x => x.cur_profit));
+    datasets.push.apply(datasets, this.marketUpdates.map(x => x.cur_profit.toFixed(2)));
 
     this.salesChart = new Chart(chartSales, {
 			type: 'line',

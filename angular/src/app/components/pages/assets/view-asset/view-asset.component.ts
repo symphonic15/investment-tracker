@@ -38,8 +38,7 @@ export class ViewAssetComponent implements OnInit {
     this.operationForm = this.formBuilder.group({
       type: [null, Validators.required],
       quantity: [null, Validators.required],
-      price: [null, Validators.required],
-      date: [new Date().toISOString().substring(0,10), Validators.required]
+      price: [null, Validators.required]
     });
     this.marketPriceInput = new FormControl('', [Validators.required]);
   }
@@ -52,7 +51,7 @@ export class ViewAssetComponent implements OnInit {
         type: this.operationForm.value.type,
         quantity: this.operationForm.value.quantity,
         price: this.operationForm.value.price,
-        date: new Date(this.operationForm.value.date)
+        date: new Date()
       };
 
       if(data.type == 'S') {
@@ -66,20 +65,22 @@ export class ViewAssetComponent implements OnInit {
         this.asset = this.ipcService.addOperation(this.assetId, data);
       }
 
+      this.asset.operations.sort((a, b)=> new Date(b.date).getTime() - new Date(a.date).getTime());
+
       this.eventEmitterService.onAssetsChanged();
     }, () => {});
 
     this.operationForm = this.formBuilder.group({
       type: [null, Validators.required],
       quantity: [null, Validators.required],
-      price: [null, Validators.required],
-      date: [new Date().toISOString().substring(0,10), Validators.required]
+      price: [null, Validators.required]
     });
   }
 
   openDeleteModal(content, operationId) {
     this.modalService.open(content, { centered: true }).result.then(() => {
       this.asset = this.ipcService.deleteOperation(this.assetId, operationId);
+      this.asset.operations.sort((a, b)=> new Date(b.date).getTime() - new Date(a.date).getTime());
       this.eventEmitterService.onAssetsChanged();
     }, () => {});
   }

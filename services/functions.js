@@ -239,9 +239,16 @@ const serviceFunctions = {
       .get('operations')
       .remove({ id: parseInt(operationId) })
       .write();
+
+    let lastAsset = db.get('assets')
+      .find({ id: parseInt(assetId) })
+      .get('operations')
+      .sortBy('date')
+      .take(1)
+      .value()[0];
     
     this.updateAssetInvested(assetId);
-    this.updateAssetProfit(assetId);
+    this.updateAssetProfit(assetId, lastAsset.price);
     this.updateAssetInvestment(assetId);
 
     return this.getAsset(assetId);

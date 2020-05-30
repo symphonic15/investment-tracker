@@ -139,7 +139,7 @@
                   <span class="badge badge-dot mr-4">{{ operation.date | date : 'longDate' : 'GMT' }}</span>
                 </td>
                 <td class="text-right">
-                  <button *ngIf="operation.id == asset.operations_count" class="btn btn-sm btn-danger" (click)="openDeleteModal(deleteOperationModal, operation.id); $event.stopPropagation();">Delete</button>
+                  <button *ngIf="operation.id == asset.operations[0].id" class="btn btn-sm btn-danger" (click)="openDeleteModal(deleteOperationModal, operation.id); $event.stopPropagation();">Delete</button>
                 </td>
               </tr>
             </tbody>
@@ -183,10 +183,6 @@
         <div class="form-group">
           <label class="form-control-label" for="input-price">Unit price</label>
           <input type="number" formControlName="price" id="input-price" class="form-control form-control-alternative" required>
-        </div>
-        <div class="form-group mb-0">
-          <label class="form-control-label" for="input-date">Operation date</label>
-          <input type="date" formControlName="date" id="input-date" class="form-control form-control-alternative" required>
         </div>
       </div>
       <div class="modal-footer">
