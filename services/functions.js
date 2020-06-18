@@ -288,6 +288,9 @@ const serviceFunctions = {
         .push(marketUpdate)
         .write();
     }
+  },
+  clearMarketUpdates: function() {
+    db.set('market_updates', []).write();
   }
 }
 

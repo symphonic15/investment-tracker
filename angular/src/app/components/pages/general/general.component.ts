@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Chart from 'chart.js';
 
 // core components
@@ -18,26 +19,31 @@ export class GeneralComponent implements OnInit {
   marketUpdates;
   operations;
 
-  salesChart;
+  historyChart;
 
   constructor(
-    private ipcService: IpcService
+    private ipcService: IpcService,
+    private modalService: NgbModal
   ) {
-    this.marketUpdates = this.ipcService.getMarketUpdates();
+    this.marketUpdates = ipcService.getMarketUpdates();
     this.operations = ipcService.getAllOperations();
   }
 
   ngOnInit(): void {
+    this.updateHistoryChart();
+  }
+
+  updateHistoryChart() {
     parseOptions(Chart, chartOptions());
     
-    var chartSales = document.getElementById('chart-sales');
+    var chartHistory = document.getElementById('chart-history');
     
     var labels = ['Start'];
     labels.push.apply(labels, this.marketUpdates.map(x => x.date));
     var datasets = [0];
     datasets.push.apply(datasets, this.marketUpdates.map(x => x.cur_profit.toFixed(2)));
 
-    this.salesChart = new Chart(chartSales, {
+    this.historyChart = new Chart(chartHistory, {
 			type: 'line',
 			options: {
         scales: {
@@ -62,6 +68,15 @@ export class GeneralComponent implements OnInit {
         }]
       }
 		});
+  }
+
+  openClearModal(content) {
+    this.modalService.open(content, { centered: true }).result.then(() => {
+      this.ipcService.clearMarketUpdates();
+      this.marketUpdates = this.ipcService.getMarketUpdates();
+      this.operations = this.ipcService.getAllOperations();
+      this.updateHistoryChart();
+    }, () => {});
   }
 
 }

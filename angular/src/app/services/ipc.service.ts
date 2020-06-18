@@ -174,4 +174,11 @@ export class IpcService {
 
     return asset;
   }
+
+  /* MARKET UPDATES */
+
+  // Clear all market updates history
+  clearMarketUpdates() {
+    return this.electronService.ipcRenderer.sendSync('clear-market-updates');
+  }
 }

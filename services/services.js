@@ -94,3 +94,7 @@ ipcMain.on('delete-operation', (event, data) => {
 ipcMain.on('add-market-update', () => {
   serviceFunctions.addMarketUpdate();
 });
+
+ipcMain.on('clear-market-updates', (event) => {
+  event.returnValue = serviceFunctions.clearMarketUpdates();
+});
