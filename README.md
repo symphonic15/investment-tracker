@@ -1,5 +1,5 @@
 # Investment Tracker
-**A customizable program designed to obtain all the general information of our current investments in the market, categorizing all by assets and giving data like current investment values, profits and losses, history graphics, last purchases and sales doed and more..**
+**A customizable program designed to obtain all the general information of our current investments in the market, categorizing all by assets and giving data like current investment values, profits and losses, history graphics, last purchases and sales done and more..**
 
 [Documentation in spanish](https://unjex.com/projects/investment-tracker)
 
