@@ -18,3 +18,12 @@
 .validation-error {
   font-size: .8rem;
 }
+.operation-type {
+  width: 130px;
+}
+.custom-control-label::before {
+  left: -2rem !important;
+}
+.custom-control-label::after {
+  left: -2rem !important;
+}

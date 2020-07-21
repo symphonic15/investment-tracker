@@ -165,14 +165,18 @@
     </div>
     <form [formGroup]="operationForm">
       <div class="modal-body">
-        <div class="row form-group">
-          <div class="col-6 custom-control custom-control-alternative custom-radio text-right">
-            <input type="radio" formControlName="type" name="type" class="custom-control-input" id="operation-type-buy" value="B">
-            <label class="custom-control-label" for="operation-type-buy">Purchase</label>
+        <div class="text-center">
+          <div class="form-group operation-type d-inline-block mx-3">
+            <div class="custom-control custom-control-alternative custom-radio">
+              <input type="radio" formControlName="type" name="type" class="custom-control-input" id="operation-type-buy" value="B">
+              <label class="custom-control-label" for="operation-type-buy">Purchase</label>
+            </div>
           </div>
-          <div class="col-6 custom-control custom-control-alternative custom-radio text-left">
-            <input type="radio" formControlName="type" name="type" class="custom-control-input" id="operation-type-sell" value="S">
-            <label class="custom-control-label" for="operation-type-sell">Sale</label>
+          <div class="form-group operation-type d-inline-block mx-3">
+            <div class="custom-control custom-control-alternative custom-radio">
+              <input type="radio" formControlName="type" name="type" class="custom-control-input" id="operation-type-sell" value="S">
+              <label class="custom-control-label" for="operation-type-sell">Sale</label>
+            </div>
           </div>
         </div>
         <div class="form-group">
